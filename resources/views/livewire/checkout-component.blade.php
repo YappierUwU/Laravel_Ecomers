@@ -67,12 +67,15 @@
                                 <input  type="text" name="add" value="" placeholder="Street at apartment number" wire:model="line2">
                             </p>
                             <p class="row-in-form">
-                                <label for="country">Country<span>*</span></label>
-                                <input  type="text" name="country" value="" placeholder="United States" wire:model="country">
-                                @error('country')
-                                    <span class="text-danger">{{$message}}</span>
-                                @enderror
+                                <label class="col-md-4 control-label">Country</label>
+                                <select class="form-control" wire:model="country">
+                                    <option value="0">Select Country</option>
+                                @foreach ($countries as $cts )
+                                    <option value="{{$cts->lenght}}">{{$cts->name}}</option>
+                                @endforeach
+                            </select>
                             </p>
+
                             <p class="row-in-form">
                                 <label for="province">Province<span>*</span></label>
                                 <input  type="text" name="province" value="" placeholder="Province name" wire:model="province">
@@ -148,11 +151,13 @@
                                 <input  type="text" name="add" value="" placeholder="Street at apartment number" wire:model="s_line2" >
                             </p>
                             <p class="row-in-form">
-                                <label for="country">Country<span>*</span></label>
-                                <input  type="text" name="country" value="" placeholder="United States" wire:model="s_country">
-                                @error('s_country')
-                                    <span class="text-danger">{{$message}}</span>
-                                @enderror
+                                <label for="country" class="col-md-4 control-label">Country <span>*</span> </label>
+                                    <select class="form-control" wire:model="country">
+                                        <option value="0">Select Country</option>
+                                    @foreach ($countries as $country )
+                                        <option value="{{$country->lenght}}">{{$country->name}}</option>
+                                    @endforeach
+                                </select>
                             </p>
                             <p class="row-in-form">
                                 <label for="province">Province<span>*</span></label>
@@ -246,7 +251,7 @@
                                 @enderror
                     </div>
                     @if (Session::has('checkout'))
-                    <p class="summary-info grand-total"><span>Grand Total</span> <span class="grand-total-price">${{Session::get('checkout')['total']}}</span></p>
+                    <p class="summary-info grand-total"><span>Grand Total</span> <span class="grand-total-price">${{Session::get('checkout')['total']+$shipping_charge}}</span></p>
                     @endif
 
                     @if($errors->isEmpty())
@@ -260,8 +265,20 @@
                 </div>
                 <div class="summary-item shipping-method">
                     <h4 class="title-box f-title">Shipping method</h4>
+                    <p class="row-in-form">
+                            <select class="form-control" wire:model="expedition" wire:change="setShippingCharge">
+                                <option value="0">Select Expedition</option>
+                            @foreach ($expeditions as $exp )
+                                <option value="{{$exp->price_km}}">{{$exp->expedition}}</option>
+                            @endforeach
+                        </select>
+                    </p>
                     <p class="summary-info"><span class="title">Flat Rate</span></p>
+                    @if ($shipping_charge)
+                    <p class="summary-info"><span class="title">Fixed ${{$shipping_charge}}</span></p>
+                    @else
                     <p class="summary-info"><span class="title">Fixed $0.00</span></p>
+                    @endif
                 </div>
             </div>
         </form>

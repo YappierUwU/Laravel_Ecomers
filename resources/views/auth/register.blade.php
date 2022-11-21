@@ -85,6 +85,10 @@
 										<label for="frm-reg-cfpass">Confirm Password *</label>
 										<input type="password" id="frm-reg-cfpass" name="password_confirmation" placeholder="Confirm Password" required autocomplete="new-password">
 									</fieldset>
+                                    <fieldset class="wrap-input">
+                                        {!! NoCaptcha::renderJs('en', false, 'onloadCallback') !!}
+                                        {!! NoCaptcha::display() !!}
+                                    </fieldset>
 									<input type="submit" class="btn btn-sign" value="Register" name="register">
 								</form>
 							</div>
@@ -97,3 +101,10 @@
 
 	</main>
 </x-base-layout>
+
+<script type="text/javascript">
+    var onloadCallback = function() {
+      alert("grecaptcha is ready!");
+    };
+  </script>
+

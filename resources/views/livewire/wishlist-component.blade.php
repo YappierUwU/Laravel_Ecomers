@@ -24,10 +24,10 @@
                 font-size: 32px;
             }
             .product-wish .fa:hover{
-                color: #ff7007;
+                color: red;
             }
             .fill-heart{
-                color: #ff7007 !important;
+                color: red !important;
             }
         </style>
 

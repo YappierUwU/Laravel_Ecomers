@@ -39,7 +39,7 @@
             </tr>
             <tr>
                 <td colspan="3"></td>
-                <td style="font-size: 15px;font-weight:bold;border-top:1px solid #ccc">Shipping : Free Shipping</td>
+                <td style="font-size: 15px;font-weight:bold;border-top:1px solid #ccc">Shipping : ${{$order->shipping_charge}}</td>
             </tr>
             <tr>
                 <td colspan="3"></td>
