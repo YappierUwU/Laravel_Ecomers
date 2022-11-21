@@ -18,12 +18,16 @@ class CategoryComponent extends Component
 
     public $scategory_slug;
 
+
+
     public function mount($category_slug,$scategory_slug=null)
     {
         $this->sorting = "default";
         $this->pagesize = 12;
         $this->category_slug = $category_slug;
         $this->scategory_slug = $scategory_slug;
+
+        
     }
 
     use WithPagination;
@@ -51,6 +55,8 @@ class CategoryComponent extends Component
             $filter = "";
         }
 
+
+
         if($this->sorting=='date'){
             $products = Product::where($filter.'category_id',$category_id)->orderBy('created_at','DESC')->paginate($this->pagesize);
         }
@@ -66,6 +72,8 @@ class CategoryComponent extends Component
 
         $categories = Category::all();
 
-        return view('livewire.category-component',['products' => $products,'categories'=>$categories,'category_name'=>$category_name])->layout("layouts.base");
+        $popular_product = Product::inRandomOrder()->limit(4)->get();
+
+        return view('livewire.category-component',['products' => $products,'popular_product'=>$popular_product,'categories'=>$categories,'category_name'=>$category_name])->layout("layouts.base");
     }
 }

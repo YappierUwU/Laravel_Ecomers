@@ -33,7 +33,7 @@ class DetailsComponent extends Component
             $this->qty--;
         }
     }
-
+   
     public function render()
     {
         $product = Product::where('slug',$this->slug)->first();

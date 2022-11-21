@@ -7,6 +7,8 @@ use App\Models\OrderItem;
 use App\Models\Shipping;
 use App\Models\Transaction;
 use App\Mail\OrderMail;
+use App\Models\Country;
+use App\Models\Expedition;
 use Cart;
 use Stripe;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +48,10 @@ class CheckoutComponent extends Component
     public $exp_month;
     public $exp_year;
     public $cvc;
+
+
+    public $expedition;
+    public $shipping_charge;
 
     public function updated($fields){
         $this->validateOnly($fields,[
@@ -107,13 +113,15 @@ class CheckoutComponent extends Component
                 'cvc'=>'required|numeric',
             ]);
         }
-
+        $exp_id = Expedition::where('price_km', $this->expedition)->first()->id;
         $order = new Order();
         $order->user_id = Auth::user()->id;
         $order->subtotal = session()->get('checkout')['subtotal'];
         $order->discount = session()->get('checkout')['discount'];
         $order->tax = session()->get('checkout')['tax'];
-        $order->total = session()->get('checkout')['total'];
+        $order->shipping_charge = $this->shipping_charge;
+        $order->expedition_id = $exp_id;
+        $order->total = session()->get('checkout')['total']+$this->shipping_charge;
         $order->firstname = $this->firstname;
         $order->lastname = $this->lastname;
         $order->email = $this->email;
@@ -272,9 +280,18 @@ class CheckoutComponent extends Component
         }
     }
 
+    public function setShippingCharge(){
+        if(isset($this->country) || isset($this->s_country)){
+            $country_lenght = Country::where('lenght',$this->country)->first()->lenght;
+            $price_km = Expedition::where('price_km',$this->expedition)->first()->price_km;
+            $this->shipping_charge = $country_lenght * $price_km;
+        }
+    }
+
     public function render()
     {
+
         $this->verifyForCheckout();
-        return view('livewire.checkout-component')->layout('layouts.base');
+        return view('livewire.checkout-component',['countries'=>Country::all(),'expeditions'=>Expedition::all() ])->layout('layouts.base');
     }
 }

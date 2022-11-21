@@ -49,6 +49,8 @@ class SearchComponent extends Component
 
         $categories = Category::all();
 
-        return view('livewire.search-component', ['products' => $products, 'categories' => $categories])->layout('layouts.base');
+        $popular_product = Product::inRandomOrder()->limit(4)->get();
+
+        return view('livewire.search-component', ['products' => $products,'popular_product'=>$popular_product, 'categories' => $categories])->layout('layouts.base');
     }
 }
